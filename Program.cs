@@ -9,17 +9,14 @@ namespace cscat
     {
       if (args.Length == 0)
       {
-        Console.WriteLine("Error: no args");
-        return;
+        CopyStandardInputToOutput();
       }
 
       foreach (var path in args)
       {
         if (path == "-")
         {
-          Console.WriteLine("Reading stdin");
-          Stream input = Console.OpenStandardInput();
-          input.CopyTo(Console.OpenStandardOutput());
+          CopyStandardInputToOutput();
         }
         else
         {
@@ -37,6 +34,10 @@ namespace cscat
           }
         }
       }
+    }
+
+    static void CopyStandardInputToOutput() {
+      Console.OpenStandardInput().CopyTo(Console.OpenStandardOutput());
     }
   }
 }
