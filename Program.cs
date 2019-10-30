@@ -5,8 +5,10 @@ namespace cscat
 {
   class Program
   {
-    static void Main(string[] args)
+    static int Main(string[] args)
     {
+      int exitCode = 0;
+
       if (args.Length == 0)
       {
         CopyStandardInputToOutput();
@@ -25,15 +27,18 @@ namespace cscat
             using (StreamReader sr = new StreamReader(path))
             {
               String line = sr.ReadToEnd();
-              Console.WriteLine(line);
+              Console.Write(line);
             }
           }
           catch (Exception)
           {
             Console.WriteLine("cat: {0:G}: No such file or directory", path);
+            exitCode = 1;
           }
         }
       }
+
+      return exitCode;
     }
 
     static void CopyStandardInputToOutput() {
