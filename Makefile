@@ -9,3 +9,7 @@ bin/Debug/net5.0/osx-x64/cscat: Program.cs
 
 bin/Release/net5.0/osx-x64/cscat: Program.cs
 	dotnet build -c Release -r osx-x64 -p:PublishSingleFile=true --nologo
+
+.PHONY: lint
+lint:
+	PATH="$$PATH:$$HOME/.dotnet/tools" dotnet format
