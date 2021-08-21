@@ -29,14 +29,7 @@ namespace cscat
       {
         if (filename == "-")
         {
-          using (StreamReader sr = new StreamReader(Console.OpenStandardInput()))
-          {
-            string line;
-            while ((line = sr.ReadLine()) != null)
-            {
-              Console.WriteLine(line);
-            }
-          }
+          Console.OpenStandardInput().CopyTo(Console.OpenStandardOutput());
         }
         else
         {
