@@ -42,13 +42,9 @@ namespace cscat
           else
           {
             // Copy file contents to stdout
-            using (StreamReader sr = new StreamReader(filename))
+            using (Stream sr = new StreamReader(filename).BaseStream)
             {
-              string line;
-              while ((line = sr.ReadLine()) != null)
-              {
-                Console.WriteLine(line);
-              }
+              sr.CopyTo(Console.OpenStandardOutput());
             }
           }
         }
