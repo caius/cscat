@@ -5,44 +5,56 @@ namespace cscat
 {
   class Program
   {
-    static int Main(string[] args)
+    static void Main(string[] args)
     {
-      int exitCode = 0;
+      bool exit_with_error = false;
 
+      // If there are no arguments, read from stdin
+      // If there are arguments:
+      //   - Read from stdin for "-"
+      //   - Check if argument string exists on filesystem as a file
+      //   - If it does, copy to stdout
+      //   - If not, output error to stderr & set exit value
+
+      // When there are no arguments, inject "-" to trigger reading from stdin
       if (args.Length == 0)
       {
-        CopyStandardInputToOutput();
+        // https://stackoverflow.com/a/1440325/50708
+        Array.Resize(ref args, args.Length + 1);
+        args[args.Length - 1] = "-";
       }
 
-      foreach (var path in args)
+      // Run through arguments
+      foreach (string filename in args)
       {
-        if (path == "-")
+        if (filename == "-")
         {
-          CopyStandardInputToOutput();
+          Console.OpenStandardInput().CopyTo(Console.OpenStandardOutput());
         }
         else
         {
-          try
+          // Check file exists before we attempt to read it
+          if (!File.Exists(filename))
           {
-            using (StreamReader sr = new StreamReader(path))
-            {
-              String line = sr.ReadToEnd();
-              Console.Write(line);
-            }
+            Console.Error.WriteLine($"cat: {filename}: No such file or directory");
+            exit_with_error = true;
           }
-          catch (Exception)
+          else
           {
-            Console.WriteLine("cat: {0:G}: No such file or directory", path);
-            exitCode = 1;
+            // Copy file contents to stdout
+            using (Stream sr = new StreamReader(filename).BaseStream)
+            {
+              sr.CopyTo(Console.OpenStandardOutput());
+            }
           }
         }
       }
 
-      return exitCode;
-    }
-
-    static void CopyStandardInputToOutput() {
-      Console.OpenStandardInput().CopyTo(Console.OpenStandardOutput());
+      // If we errored reading paths at any point we need to exit(1)
+      if (exit_with_error == true)
+      {
+        Environment.ExitCode = 1;
+      }
     }
   }
 }
