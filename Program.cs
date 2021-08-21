@@ -21,11 +21,18 @@ namespace cscat
       {
         if (filename == "-")
         {
-          // FIXME: read from stdin
+          using (StreamReader sr = new StreamReader(Console.OpenStandardInput()))
+          {
+            string line;
+            while ((line = sr.ReadLine()) != null)
+            {
+              Console.WriteLine(line);
+            }
+          }
         }
         else
         {
-          // Check if file on system
+          // Check file exists before we attempt to read it
           if (!File.Exists(filename))
           {
             Console.Error.WriteLine($"cat: {filename}: No such file or directory");
