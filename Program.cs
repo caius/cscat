@@ -1,48 +1,17 @@
 using System;
-using System.IO;
 
 namespace cscat
 {
-  class Program
-  {
-    static int Main(string[] args)
+    class Program
     {
-      int exitCode = 0;
-
-      if (args.Length == 0)
-      {
-        CopyStandardInputToOutput();
-      }
-
-      foreach (var path in args)
-      {
-        if (path == "-")
+        static void Main(string[] args)
         {
-          CopyStandardInputToOutput();
-        }
-        else
-        {
-          try
-          {
-            using (StreamReader sr = new StreamReader(path))
-            {
-              String line = sr.ReadToEnd();
-              Console.Write(line);
-            }
+          // Run through the arguments and check
+          foreach (string a in args) {
+            Console.WriteLine(a);
           }
-          catch (Exception)
-          {
-            Console.WriteLine("cat: {0:G}: No such file or directory", path);
-            exitCode = 1;
-          }
+
+          Console.WriteLine("Hello World!");
         }
-      }
-
-      return exitCode;
     }
-
-    static void CopyStandardInputToOutput() {
-      Console.OpenStandardInput().CopyTo(Console.OpenStandardOutput());
-    }
-  }
 }
