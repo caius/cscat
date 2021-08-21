@@ -16,6 +16,14 @@ namespace cscat
       //   - If it does, copy to stdout
       //   - If not, output error to stderr & set exit value
 
+      // When there are no arguments, inject "-" to trigger reading from stdin
+      if (args.Length == 0)
+      {
+        // https://stackoverflow.com/a/1440325/50708
+        Array.Resize(ref args, args.Length + 1);
+        args[args.Length - 1] = "-";
+      }
+
       // Run through arguments
       foreach (string filename in args)
       {
