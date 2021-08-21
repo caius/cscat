@@ -28,12 +28,12 @@ namespace cscat
           // Check if file on system
           if (!File.Exists(filename))
           {
-            // FIXME: put this to stderr
-            Console.WriteLine($"cat: {filename}: No such file or directory");
+            Console.Error.WriteLine($"cat: {filename}: No such file or directory");
             exit_with_error = true;
           }
           else
           {
+            // Copy file contents to stdout
             using (StreamReader sr = new StreamReader(filename))
             {
               string line;
@@ -46,12 +46,11 @@ namespace cscat
         }
       }
 
-    // If we errored reading paths at any point we need to exit(1)
-    if (exit_with_error == true)
-    {
-      Environment.ExitCode = 1;
-    }
-
+      // If we errored reading paths at any point we need to exit(1)
+      if (exit_with_error == true)
+      {
+        Environment.ExitCode = 1;
+      }
     }
   }
 }
